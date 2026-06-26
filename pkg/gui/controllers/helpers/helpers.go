@@ -28,6 +28,7 @@ type Helpers struct {
 	MergeConflicts *MergeConflictsHelper
 	CherryPick     *CherryPickHelper
 	Host           *HostHelper
+	Deployments    *DeploymentsHelper
 	PatchBuilding  *PatchBuildingHelper
 	Staging        *StagingHelper
 	GPG            *GpgHelper
@@ -67,6 +68,7 @@ func NewStubHelpers() *Helpers {
 		MergeConflicts:    &MergeConflictsHelper{},
 		CherryPick:        &CherryPickHelper{},
 		Host:              &HostHelper{},
+		Deployments:       &DeploymentsHelper{},
 		PatchBuilding:     &PatchBuildingHelper{},
 		Staging:           &StagingHelper{},
 		GPG:               &GpgHelper{},
