@@ -550,6 +550,11 @@ refresher:
   # Detection can be disabled via option 'git.autoDetectExternalChanges'.
   externalChangeCheckInterval: 2
 
+  # Interval in seconds at which the GitHub deployment statuses shown in the
+  # status panel are re-fetched while the panel is visible. Set to 0 to disable
+  # automatic refreshing.
+  deploymentsRefreshInterval: 30
+
 # If true, show a confirmation popup before quitting Lazygit
 confirmOnQuit: false
 

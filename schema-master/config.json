@@ -3589,6 +3589,12 @@
           "exclusiveMinimum": 0,
           "description": "Interval in seconds at which lazygit polls for external ref changes (commits, branch updates, checkouts made outside lazygit).\nDetection can be disabled via option 'git.autoDetectExternalChanges'.",
           "default": 2
+        },
+        "deploymentsRefreshInterval": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Interval in seconds at which the GitHub deployment statuses shown in the status panel are re-fetched while the panel is visible. Set to 0 to disable automatic refreshing.",
+          "default": 30
         }
       },
       "additionalProperties": false,

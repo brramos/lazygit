@@ -51,6 +51,8 @@ type RefresherConfig struct {
 	// Interval in seconds at which lazygit polls for external ref changes (commits, branch updates, checkouts made outside lazygit).
 	// Detection can be disabled via option 'git.autoDetectExternalChanges'.
 	ExternalChangeCheckInterval int `yaml:"externalChangeCheckInterval" jsonschema:"exclusiveMinimum=0"`
+	// Interval in seconds at which the GitHub deployment statuses shown in the status panel are re-fetched while the panel is visible. Set to 0 to disable automatic refreshing.
+	DeploymentsRefreshInterval int `yaml:"deploymentsRefreshInterval" jsonschema:"minimum=0"`
 }
 
 func (c *RefresherConfig) RefreshIntervalDuration() time.Duration {
@@ -63,6 +65,10 @@ func (c *RefresherConfig) FetchIntervalDuration() time.Duration {
 
 func (c *RefresherConfig) ExternalChangeCheckIntervalDuration() time.Duration {
 	return time.Second * time.Duration(c.ExternalChangeCheckInterval)
+}
+
+func (c *RefresherConfig) DeploymentsRefreshIntervalDuration() time.Duration {
+	return time.Second * time.Duration(c.DeploymentsRefreshInterval)
 }
 
 type GuiConfig struct {
@@ -962,6 +968,7 @@ func GetDefaultConfigForPlatform(platform string) *UserConfig {
 			RefreshInterval:             10,
 			FetchInterval:               60,
 			ExternalChangeCheckInterval: 2,
+			DeploymentsRefreshInterval:  30,
 		},
 		Update: UpdateConfig{
 			Method: "prompt",

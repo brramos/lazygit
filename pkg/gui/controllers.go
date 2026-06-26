@@ -73,6 +73,8 @@ func (gui *Gui) resetHelpersAndControllers() {
 		rebaseHelper,
 	)
 	bisectHelper := helpers.NewBisectHelper(helperCommon)
+	hostHelper := helpers.NewHostHelper(helperCommon)
+	deploymentsHelper := helpers.NewDeploymentsHelper(helperCommon, hostHelper)
 	windowHelper := helpers.NewWindowHelper(helperCommon, viewHelper)
 	modeHelper := helpers.NewModeHelper(
 		helperCommon,
@@ -90,7 +92,8 @@ func (gui *Gui) resetHelpersAndControllers() {
 
 	gui.helpers = &helpers.Helpers{
 		Refs:            refsHelper,
-		Host:            helpers.NewHostHelper(helperCommon),
+		Host:            hostHelper,
+		Deployments:     deploymentsHelper,
 		PatchBuilding:   patchBuildingHelper,
 		Staging:         stagingHelper,
 		Bisect:          bisectHelper,
