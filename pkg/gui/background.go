@@ -73,6 +73,12 @@ func (self *BackgroundRoutineMgr) startBackgroundRoutines() {
 		}
 	}
 
+	// A zero interval means the user has disabled deployments refreshing; unlike
+	// the routines above there's no separate on/off toggle, so we just skip it.
+	if userConfig.Refresher.DeploymentsRefreshInterval > 0 {
+		go utils.Safe(self.startBackgroundDeploymentsRefresh)
+	}
+
 	if self.gui.Config.GetDebug() {
 		self.goEvery(time.Second*time.Duration(10), self.gui.stopChan, func(_ bool) error {
 			formatBytes := func(b uint64) string {
@@ -153,6 +159,26 @@ func (self *BackgroundRoutineMgr) startBackgroundExternalChangeDetection() {
 		self.gui.stopChan,
 		func(_ bool) error {
 			self.checkForExternalChanges()
+			return nil
+		},
+	)
+}
+
+func (self *BackgroundRoutineMgr) startBackgroundDeploymentsRefresh() {
+	self.gui.waitForIntro.Wait()
+
+	userConfig := self.gui.UserConfig()
+	self.goEvery(
+		userConfig.Refresher.DeploymentsRefreshIntervalDuration(),
+		self.gui.stopChan,
+		func(_ bool) error {
+			// The deployments cache is UI-thread-only, and Refresh is a no-op
+			// unless the status panel is currently showing deployments, so this
+			// only hits GitHub while the panel is visible.
+			self.gui.onUIThread(func() error {
+				self.gui.helpers.Deployments.Refresh()
+				return nil
+			})
 			return nil
 		},
 	)
